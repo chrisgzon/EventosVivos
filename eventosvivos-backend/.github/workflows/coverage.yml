@@ -1,0 +1,41 @@
+name: CI - Code coverage
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
+      - name: Restore solution
+        run: dotnet restore
+
+      - name: Run tests and collect coverage
+        run: |
+          dotnet test --configuration Release --collect:"XPlat Code Coverage"
+
+      - name: Generate coverage report (HTML + text summary)
+        run: |
+          dotnet tool run reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html;TextSummary
+          echo "--- Coverage summary ---"
+          if [ -f coverage-report/Summary.txt ]; then cat coverage-report/Summary.txt; fi
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report
