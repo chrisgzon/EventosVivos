@@ -51,7 +51,7 @@ public sealed class EventRepository : IEventRepository
             query = query.Where(e => e.Status == status.Value);
 
         if (!string.IsNullOrWhiteSpace(titleSearch))
-            query = query.Where(e => EF.Functions.ILike(e.Title, $"%{titleSearch}%"));
+            query = query.Where(e => EF.Functions.Like(e.Title, $"%{titleSearch}%"));
 
         return await query.OrderBy(e => e.StartDateTimeUtc).ToListAsync(ct);
     }

@@ -13,7 +13,7 @@ RUN dotnet restore
 
 COPY . .
 RUN dotnet publish src/EventosVivos.Api/EventosVivos.Api.csproj \
-    -c Release -o /app/out --no-restore
+    -c Release -o /app/out 
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime

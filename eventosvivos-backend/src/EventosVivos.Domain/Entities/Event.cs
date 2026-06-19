@@ -32,13 +32,13 @@ public sealed class Event
 
     /// <summary>Entradas ya ocupadas (sólo reservas confirmadas).</summary>
     public int ConfirmedTickets =>
-        _reservations.Where(r => r.Status == ReservationStatus.Confirmada).Sum(r => r.Quantity);
+        _reservations.Where(r => r.Status == ReservationStatus.Confirmada || (r.Status == ReservationStatus.Cancelada && r.IsLostOnCancellation)).Sum(r => r.Quantity);
 
-    /// <summary>Entradas disponibles (capacidad − confirmadas − pendientes de pago).</summary>
+    /// <summary>Entradas disponibles (capacidad − confirmadas − pendientes de pago - canceladas perdidas).</summary>
     public int AvailableTickets =>
         MaxCapacity
         - _reservations
-            .Where(r => r.Status is ReservationStatus.Confirmada or ReservationStatus.PendientePago)
+            .Where(r => (r.Status is ReservationStatus.Confirmada or ReservationStatus.PendientePago) || (r.Status == ReservationStatus.Cancelada && r.IsLostOnCancellation))
             .Sum(r => r.Quantity);
 
     // Required by EF Core
@@ -66,7 +66,6 @@ public sealed class Event
         EventType type,
         DateTime nowUtc)
     {
-        // ----- RF-01 validations -----
         if (string.IsNullOrWhiteSpace(title) || title.Length < 5 || title.Length > 100)
             throw new BusinessRuleViolationException("RF01",
                 "El título es obligatorio y debe tener entre 5 y 100 caracteres.");
@@ -79,7 +78,6 @@ public sealed class Event
             throw new BusinessRuleViolationException("RF01",
                 "La capacidad máxima debe ser un entero positivo.");
 
-        // RN01 — Capacidad del venue
         if (maxCapacity > venue.Capacity)
             throw new BusinessRuleViolationException("RN01",
                 $"La capacidad del evento ({maxCapacity}) excede la capacidad del venue '{venue.Name}' ({venue.Capacity}).");
@@ -96,8 +94,6 @@ public sealed class Event
             throw new BusinessRuleViolationException("RF01",
                 "El precio de entrada debe ser un decimal positivo.");
 
-        // RN03 — Restricción de horario nocturno (weekends no puede iniciar después de las 22:00)
-        // Convertimos a hora local Colombia (UTC-5) para evaluar la regla de negocio
         var startLocal = startDateTimeUtc.ToLocalFromColombia();
         if ((startLocal.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             && startLocal.Hour >= 22)
@@ -133,7 +129,7 @@ public sealed class Event
     /// </summary>
     public void RefreshStatus(DateTime nowUtc)
     {
-        if (Status == EventStatus.Cancelado) return;
+        if (Status != EventStatus.Activo) return;
         Status = nowUtc > EndDateTimeUtc
             ? EventStatus.Completado
             : EventStatus.Activo;

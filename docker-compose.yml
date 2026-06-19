@@ -1,0 +1,45 @@
+﻿version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: eventosvivos_db
+    restart: unless-stopped
+    ports:
+      - "1434:1433"
+    environment:
+      SA_PASSWORD: "EventosVivos_2026!"
+      ACCEPT_EULA: "Y"
+    networks:
+      - eventosvivos_net
+
+  api:
+    build:
+      context: ./eventosvivos-backend
+      dockerfile: src/EventosVivos.Api/Dockerfile
+    container_name: eventosvivos_api
+    restart: unless-stopped
+    ports:
+      - "7262:8080"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=EventosVivos;User=sa;Password=EventosVivos_2026!;TrustServerCertificate=True;Encrypt=False;
+    networks:
+      - eventosvivos_net
+
+  frontend:
+    build:
+      context: ./eventosvivos-frontend
+    container_name: eventosvivos_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - eventosvivos_net
+
+networks:
+  eventosvivos_net:
+    driver: bridge

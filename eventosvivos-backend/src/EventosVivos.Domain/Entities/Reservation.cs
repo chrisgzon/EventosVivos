@@ -42,12 +42,10 @@ public sealed class Reservation
         string buyerEmail,
         DateTime nowUtc)
     {
-        // RF-03: email válido
         if (!IsValidEmail(buyerEmail))
             throw new BusinessRuleViolationException("RF03",
                 "El formato del email del comprador no es válido.");
 
-        // RF-03: cantidad ≥ 1
         if (quantity < 1)
             throw new BusinessRuleViolationException("RF03",
                 "La cantidad de entradas debe ser al menos 1.");
@@ -56,23 +54,19 @@ public sealed class Reservation
             throw new BusinessRuleViolationException("RF03",
                 "El nombre del comprador es obligatorio.");
 
-        // RN04 — No se permite reservar si el evento inicia en menos de 1 hora
         var hoursToStart = (@event.StartDateTimeUtc - nowUtc).TotalHours;
         if (hoursToStart < 1)
             throw new BusinessRuleViolationException("RN04",
                 "No se pueden realizar reservas para eventos que inician en menos de 1 hora.");
 
-        // RF-03: Regla < 24h → máximo 5 entradas
         if (hoursToStart < 24 && quantity > 5)
             throw new BusinessRuleViolationException("RF03",
                 "Para eventos que inician en menos de 24 horas sólo se permiten máximo 5 entradas por transacción.");
 
-        // RN05 — Precio > $100 → máximo 10 entradas
         if (@event.TicketPrice > 100 && quantity > 10)
             throw new BusinessRuleViolationException("RN05",
                 "Para eventos con precio superior a $100 se permiten máximo 10 entradas por transacción.");
 
-        // RF-03: disponibilidad
         if (@event.AvailableTickets < quantity)
             throw new BusinessRuleViolationException("RF03",
                 $"No hay suficientes entradas disponibles. Disponibles: {@event.AvailableTickets}, solicitadas: {quantity}.");
