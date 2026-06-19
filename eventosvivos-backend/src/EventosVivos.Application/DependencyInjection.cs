@@ -1,4 +1,5 @@
 ﻿using EventosVivos.Application.Services;
+using EventosVivos.Application.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventosVivos.Application
@@ -7,8 +8,8 @@ namespace EventosVivos.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<EventService>();
-            services.AddScoped<ReservationService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IReservationService, ReservationService>();
 
             return services;
         }

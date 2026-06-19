@@ -1,5 +1,6 @@
 using EventosVivos.Application.DTOs;
 using EventosVivos.Application.Services;
+using EventosVivos.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventosVivos.Api.Controllers;
@@ -13,9 +14,9 @@ namespace EventosVivos.Api.Controllers;
 [Produces("application/json")]
 public sealed class ReservationsController : ControllerBase
 {
-    private readonly ReservationService _reservationService;
+    private readonly IReservationService _reservationService;
 
-    public ReservationsController(ReservationService reservationService)
+    public ReservationsController(IReservationService reservationService)
         => _reservationService = reservationService;
 
     /// <summary>

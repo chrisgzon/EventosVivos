@@ -1,6 +1,5 @@
 using EventosVivos.Application.DTOs;
-using EventosVivos.Application.Interfaces;
-using EventosVivos.Application.Services;
+using EventosVivos.Application.Services.Interfaces;
 using EventosVivos.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +14,9 @@ namespace EventosVivos.Api.Controllers;
 [Produces("application/json")]
 public sealed class EventsController : ControllerBase
 {
-    private readonly EventService _eventService;
+    private readonly IEventService _eventService;
 
-    public EventsController(EventService eventService)
+    public EventsController(IEventService eventService)
         => _eventService = eventService;
 
     /// <summary>

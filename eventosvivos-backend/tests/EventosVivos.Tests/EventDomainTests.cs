@@ -169,4 +169,13 @@ public class EventDomainTests
 
         @event.Status.Should().Be(EventStatus.Cancelado);
     }
+
+    [Fact]
+    public void Create_WithPriceJustAbove100_AndMoreThan10Tickets_ShouldThrowRN05()
+    {
+        var @event = TestFactory.CreateEvent(price: 100.01m, maxCapacity: 200, nowUtc: _now);
+        var act = () => Reservation.Create(@event, 11, "Test", "t@t.com", _now);
+        act.Should().Throw<BusinessRuleViolationException>()
+           .Which.RuleCode.Should().Be("RN05");
+    }
 }

@@ -1,5 +1,6 @@
 using EventosVivos.Application.DTOs;
 using EventosVivos.Application.Interfaces;
+using EventosVivos.Application.Services.Interfaces;
 using EventosVivos.Domain.Entities;
 using EventosVivos.Domain.Exceptions;
 
@@ -10,7 +11,7 @@ namespace EventosVivos.Application.Services;
 /// Orquesta las operaciones RF-01, RF-02 y RF-06, y delega las reglas
 /// de dominio a las entidades del modelo.
 /// </summary>
-public sealed class EventService
+public sealed class EventService : IEventService
 {
     private readonly IEventRepository _eventRepo;
     private readonly IVenueRepository _venueRepo;

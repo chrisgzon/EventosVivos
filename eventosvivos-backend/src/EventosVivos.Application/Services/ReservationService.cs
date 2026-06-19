@@ -1,5 +1,6 @@
 using EventosVivos.Application.DTOs;
 using EventosVivos.Application.Interfaces;
+using EventosVivos.Application.Services.Interfaces;
 using EventosVivos.Domain.Entities;
 using EventosVivos.Domain.Exceptions;
 
@@ -10,7 +11,7 @@ namespace EventosVivos.Application.Services;
 /// Orquesta RF-03 (crear), RF-04 (confirmar pago) y RF-05 (cancelar).
 /// Las reglas de negocio RN04-RN07 viven en la entidad <see cref="Reservation"/>.
 /// </summary>
-public sealed class ReservationService
+public sealed class ReservationService : IReservationService
 {
     private readonly IReservationRepository _reservationRepo;
     private readonly IEventRepository _eventRepo;

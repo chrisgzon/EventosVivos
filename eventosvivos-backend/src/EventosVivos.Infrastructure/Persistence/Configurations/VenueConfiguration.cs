@@ -10,7 +10,6 @@ public sealed class VenueConfiguration : IEntityTypeConfiguration<Venue>
     {
         builder.ToTable("venues");
         builder.HasKey(v => v.Id);
-        builder.Property(v => v.Id).ValueGeneratedNever(); // IDs fijos del seed
         builder.Property(v => v.Name).IsRequired().HasMaxLength(150);
         builder.Property(v => v.City).IsRequired().HasMaxLength(100);
         builder.Property(v => v.Capacity).IsRequired();
