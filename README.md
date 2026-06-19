@@ -136,3 +136,7 @@ docker-compose up -d --build
 | Frontend | Angular 19 · TypeScript · SCSS |
 | Tests | xUnit · Moq · FluentAssertions |
 | Infraestructura | Docker · Docker Compose · Nginx |
+
+## 🧪 Reporte de Cobertura
+
+👉 [Ver reporte completo](https://chrisgzon.github.io/EventosVivos/eventosvivos-backend/coverage-report/)
