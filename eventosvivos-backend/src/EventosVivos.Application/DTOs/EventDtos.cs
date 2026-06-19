@@ -45,12 +45,12 @@ public sealed record EventResponse(
     VenueSummaryResponse Venue,
     int MaxCapacity,
     int AvailableTickets,
-    DateTime StartDateTimeUtc,
-    DateTime EndDateTimeUtc,
+    DateTimeOffset StartDateTimeUtc,
+    DateTimeOffset EndDateTimeUtc,
     decimal TicketPrice,
     string Type,
     string Status,
-    DateTime CreatedAtUtc
+    DateTimeOffset CreatedAtUtc
 );
 
 public sealed record OccupancyReportResponse(

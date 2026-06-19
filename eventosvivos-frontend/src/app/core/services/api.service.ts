@@ -31,6 +31,12 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  patch<T>(path: string, body: unknown): Observable<T> {
+    return this.http
+      .patch<T>(`${this.baseUrl}/${path}`, body)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     const apiError: ApiError = {
       status: error.status,

@@ -114,9 +114,6 @@ CREATE TABLE reservations (
                                       ON DELETE CASCADE,
     CONSTRAINT CHK_reservations_qty   CHECK (Quantity >= 1),
     CONSTRAINT CHK_reservations_status CHECK (Status IN ('PendientePago', 'Confirmada', 'Cancelada')),
-
-    -- RF-04: ReservationCode must be unique when set (NCHAR enforces fixed length EV-XXXXXX)
-    CONSTRAINT UQ_reservations_code   UNIQUE (ReservationCode)   -- NULLs are distinct in SQL Server
 );
 GO
 
@@ -130,6 +127,10 @@ CREATE INDEX IX_reservations_status
 
 CREATE INDEX IX_reservations_buyer_email
     ON reservations (BuyerEmail);
+
+CREATE UNIQUE INDEX UX_reservations_code
+    ON reservations (ReservationCode)
+    WHERE ReservationCode IS NOT NULL;
 GO
 
 -- =============================================================================

@@ -61,7 +61,7 @@
         <span [class]="'badge badge--' + event.type.toLowerCase()">{{ event.type }}</span>
       </div>
       <div *ngIf="hoursToStart < 24 && hoursToStart >= 1" class="alert alert--info" style="margin-top:12px">
-        ⚠️ Este evento inicia en menos de 24 horas. Máximo <strong>{{ maxPerTransaction }}</strong> entradas por transacción.
+        ⚠️ Este evento inicia en menos de 24 horas. Máximo {{ maxPerTransaction }} entradas por transacción.
       </div>
       <div *ngIf="event.ticketPrice > 100" class="alert alert--info" style="margin-top:12px">
         ℹ️ Eventos con precio > $100: máximo <strong>10</strong> entradas por transacción (RN05).

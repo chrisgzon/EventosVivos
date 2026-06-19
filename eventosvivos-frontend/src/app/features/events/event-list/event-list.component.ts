@@ -69,9 +69,12 @@ export class EventListComponent implements OnInit {
   }
 
   formatDate(d: string): string {
-    return new Date(d).toLocaleString('es-CO', {
+     const newDate = new Date(d).toLocaleString('es-CO', {
       dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota'
     });
+    console.log('Original date string:', d);
+    console.log('Formatted date:', newDate);
+    return newDate;
   }
 
   occupancyPercent(e: EventResponse): number {

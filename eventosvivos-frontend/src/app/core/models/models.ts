@@ -1,6 +1,4 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Venue
-// ─────────────────────────────────────────────────────────────────────────────
+
 export interface Venue {
   id: number;
   name: string;
@@ -8,9 +6,6 @@ export interface Venue {
   city: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Events
-// ─────────────────────────────────────────────────────────────────────────────
 export type EventType = 'Conferencia' | 'Taller' | 'Concierto';
 export type EventStatus = 'Activo' | 'Cancelado' | 'Completado';
 
@@ -49,9 +44,6 @@ export interface EventFilters {
   titleSearch?: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Reservations
-// ─────────────────────────────────────────────────────────────────────────────
 export type ReservationStatus = 'PendientePago' | 'Confirmada' | 'Cancelada';
 
 export interface ReservationResponse {
@@ -77,9 +69,6 @@ export interface CreateReservationRequest {
   buyerEmail: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Occupancy Report
-// ─────────────────────────────────────────────────────────────────────────────
 export interface OccupancyReport {
   eventId: string;
   eventTitle: string;
@@ -91,9 +80,6 @@ export interface OccupancyReport {
   status: EventStatus;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// API Error shape
-// ─────────────────────────────────────────────────────────────────────────────
 export interface ApiError {
   status: number;
   title: string;

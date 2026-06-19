@@ -26,9 +26,9 @@ public sealed record ReservationResponse(
     string BuyerEmail,
     string Status,
     string? ReservationCode,
-    DateTime CreatedAtUtc,
-    DateTime? ConfirmedAtUtc,
-    DateTime? CancelledAtUtc,
+    DateTimeOffset CreatedAtUtc,
+    DateTimeOffset? ConfirmedAtUtc,
+    DateTimeOffset? CancelledAtUtc,
     bool IsLostOnCancellation,
     decimal TotalAmount
 );

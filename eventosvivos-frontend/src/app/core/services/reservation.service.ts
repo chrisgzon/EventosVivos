@@ -22,10 +22,10 @@ export class ReservationService {
   }
 
   confirmPayment(id: string): Observable<ReservationResponse> {
-    return this.api.post<ReservationResponse>(`reservations/${id}/confirm`, {});
+    return this.api.patch<ReservationResponse>(`reservations/${id}/confirm`, {});
   }
 
   cancel(id: string): Observable<ReservationResponse> {
-    return this.api.post<ReservationResponse>(`reservations/${id}/cancel`, {});
+    return this.api.patch<ReservationResponse>(`reservations/${id}/cancel`, {});
   }
 }
