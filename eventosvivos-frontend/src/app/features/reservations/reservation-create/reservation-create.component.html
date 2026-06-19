@@ -1,0 +1,124 @@
+<div *ngIf="loading" class="spinner-wrap"><div class="spinner"></div></div>
+
+<ng-container *ngIf="!loading">
+  <!-- Success state -->
+  <div *ngIf="createdReservation" class="success-panel card">
+    <div class="success-icon">🎉</div>
+    <h2>¡Reserva creada exitosamente!</h2>
+    <p class="success-sub">Tu reserva ha sido registrada y está pendiente de pago.</p>
+
+    <div class="reservation-summary">
+      <div class="summary-row">
+        <span>Evento</span>
+        <strong>{{ createdReservation.eventTitle }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Comprador</span>
+        <strong>{{ createdReservation.buyerName }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Email</span>
+        <strong>{{ createdReservation.buyerEmail }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Entradas</span>
+        <strong>{{ createdReservation.quantity }}</strong>
+      </div>
+      <div class="summary-row total-row">
+        <span>Total a pagar</span>
+        <strong>${{ createdReservation.totalAmount | number:'1.2-2' }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Estado</span>
+        <span class="badge badge--pendientepago">{{ createdReservation.status }}</span>
+      </div>
+    </div>
+
+    <div class="info-note">
+      ℹ️ Un administrador confirmará tu pago y recibirás tu código de reserva (<code>EV-XXXXXX</code>).
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+      <a [routerLink]="['/events', createdReservation.eventId]" class="btn btn--primary">Ver evento</a>
+      <a routerLink="/events" class="btn btn--secondary">Ir a eventos</a>
+    </div>
+  </div>
+
+  <!-- Form state -->
+  <ng-container *ngIf="!createdReservation">
+    <div class="page-header">
+      <h1>🎟 Reservar Entradas</h1>
+      <a [routerLink]="['/events', event?.id]" class="btn btn--secondary">← Volver</a>
+    </div>
+
+    <!-- Event summary -->
+    <div *ngIf="event" class="card event-summary">
+      <div class="event-summary__title">{{ event.title }}</div>
+      <div class="event-summary__meta">
+        <span>📍 {{ event.venue.name }}, {{ event.venue.city }}</span>
+        <span>🗓 {{ formatDate(event.startDateTimeUtc) }}</span>
+        <span class="price">${{ event.ticketPrice | number:'1.2-2' }} / entrada</span>
+        <span [class]="'badge badge--' + event.type.toLowerCase()">{{ event.type }}</span>
+      </div>
+      <div *ngIf="hoursToStart < 24 && hoursToStart >= 1" class="alert alert--info" style="margin-top:12px">
+        ⚠️ Este evento inicia en menos de 24 horas. Máximo <strong>{{ maxPerTransaction }}</strong> entradas por transacción.
+      </div>
+      <div *ngIf="event.ticketPrice > 100" class="alert alert--info" style="margin-top:12px">
+        ℹ️ Eventos con precio > $100: máximo <strong>10</strong> entradas por transacción (RN05).
+      </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert--error" style="margin:16px 0">
+      <strong>Error al crear reserva</strong>{{ error }}
+    </div>
+
+    <div *ngIf="event?.status !== 'Activo'" class="alert alert--error" style="margin:16px 0">
+      Este evento no está disponible para reservas (estado: {{ event?.status }}).
+    </div>
+
+    <!-- Reservation form -->
+    <div class="card form-card" *ngIf="event?.status === 'Activo'">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group">
+          <label>Nombre del Comprador *</label>
+          <input type="text" formControlName="buyerName" placeholder="Ej: María García" />
+          <span class="error-msg" *ngIf="f['buyerName'].invalid && f['buyerName'].touched">Requerido.</span>
+        </div>
+
+        <div class="form-group" style="margin-top:14px">
+          <label>Email del Comprador *</label>
+          <input type="email" formControlName="buyerEmail" placeholder="correo@ejemplo.com" />
+          <span class="error-msg" *ngIf="f['buyerEmail'].invalid && f['buyerEmail'].touched">
+            Ingrese un email válido.
+          </span>
+        </div>
+
+        <div class="form-group" style="margin-top:14px;max-width:200px">
+          <label>Cantidad de Entradas *</label>
+          <input type="number" formControlName="quantity" [min]="1" [max]="maxPerTransaction" />
+          <span class="error-msg" *ngIf="f['quantity'].invalid && f['quantity'].touched">
+            Entre 1 y {{ maxPerTransaction }}.
+          </span>
+        </div>
+
+        <!-- Price summary -->
+        <div class="price-summary" *ngIf="event">
+          <div class="price-summary__row">
+            <span>{{ f['quantity'].value || 0 }} × ${{ event.ticketPrice | number:'1.2-2' }}</span>
+            <strong>${{ totalAmount | number:'1.2-2' }}</strong>
+          </div>
+          <div class="price-summary__availability">
+            Disponibles: <strong>{{ event.availableTickets }}</strong> entradas
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a [routerLink]="['/events', event?.id]" class="btn btn--secondary">Cancelar</a>
+          <button type="submit" class="btn btn--primary" [disabled]="submitting || !event">
+            {{ submitting ? 'Procesando...' : '✓ Confirmar Reserva' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+</ng-container>

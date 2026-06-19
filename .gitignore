@@ -1,0 +1,121 @@
+########################################
+# Visual Studio  .NET
+########################################
+
+bin
+obj
+[Bb]in
+[Oo]bj
+
+.vs
+.user
+.suo
+.userosscache
+.sln.docstates
+
+# Rider
+.idea
+
+# VS Code
+.vscode
+!.vscodeextensions.json
+!.vscodesettings.json
+!.vscodetasks.json
+!.vscodelaunch.json
+
+########################################
+# .NET Publish  Build
+########################################
+
+publish
+artifacts
+TestResults
+
+.log
+.cache
+.pdb
+
+########################################
+# ASP.NET Core
+########################################
+
+appsettings.Development.json
+secrets.json
+
+########################################
+# NuGet
+########################################
+
+.nupkg
+packages
+.nuget
+
+########################################
+# Angular  Node.js
+########################################
+
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Angular build output
+dist
+.angular
+.cache
+
+# Coverage
+coverage
+
+########################################
+# Environment files
+########################################
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+########################################
+# Operating System Files
+########################################
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+########################################
+# Logs
+########################################
+
+logs
+.log
+
+########################################
+# Temporary Files
+########################################
+
+tmp
+temp
+.tmp
+
+########################################
+# Package Managers
+########################################
+
+.pnp
+.pnp.js
+
+########################################
+# Docker
+########################################
+
+docker-compose.override.yml
+
+########################################
+# Generated files
+########################################
+
+.generated.cs

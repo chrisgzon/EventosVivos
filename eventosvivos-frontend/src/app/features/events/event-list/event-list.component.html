@@ -1,0 +1,90 @@
+<div class="page-header">
+  <h1>🎭 Eventos</h1>
+  <a routerLink="/events/new" class="btn btn--primary">+ Crear evento</a>
+</div>
+
+<!-- Filters -->
+<div class="card filters-card">
+  <div class="filters-grid">
+    <div class="form-group">
+      <label>Buscar por título</label>
+      <input type="text" [(ngModel)]="titleSearch" placeholder="Ej: Concierto..." (keyup.enter)="loadEvents()" />
+    </div>
+    <div class="form-group">
+      <label>Tipo</label>
+      <select [(ngModel)]="selectedType">
+        <option value="">Todos</option>
+        <option *ngFor="let t of eventTypes" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Venue</label>
+      <select [(ngModel)]="selectedVenue">
+        <option value="">Todos</option>
+        <option *ngFor="let v of venues" [value]="v.id">{{ v.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Estado</label>
+      <select [(ngModel)]="selectedStatus">
+        <option value="">Todos</option>
+        <option *ngFor="let s of statusList" [value]="s">{{ s }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Desde</label>
+      <input type="datetime-local" [(ngModel)]="startFrom" />
+    </div>
+    <div class="form-group">
+      <label>Hasta</label>
+      <input type="datetime-local" [(ngModel)]="startTo" />
+    </div>
+  </div>
+  <div class="filters-actions">
+    <button class="btn btn--primary" (click)="loadEvents()">🔍 Filtrar</button>
+    <button class="btn btn--secondary" (click)="clearFilters()">✕ Limpiar</button>
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="spinner-wrap"><div class="spinner"></div></div>
+
+<!-- Error -->
+<div *ngIf="error && !loading" class="alert alert--error" style="margin-top:16px">
+  <strong>Error al cargar eventos</strong>{{ error }}
+</div>
+
+<!-- Empty -->
+<div *ngIf="!loading && !error && events.length === 0" class="empty-state">
+  <div class="empty-icon">📭</div>
+  <p>No se encontraron eventos con los filtros aplicados.</p>
+</div>
+
+<!-- Event cards -->
+<div *ngIf="!loading && events.length > 0" class="events-grid">
+  <div *ngFor="let event of events" class="event-card card">
+    <div class="event-card__header">
+      <span [class]="badgeClass(event.type)">{{ event.type }}</span>
+      <span [class]="badgeClass(event.status)">{{ event.status }}</span>
+    </div>
+    <h2 class="event-card__title">{{ event.title }}</h2>
+    <p class="event-card__venue">📍 {{ event.venue.name }} — {{ event.venue.city }}</p>
+    <div class="event-card__dates">
+      <span>🗓 {{ formatDate(event.startDateTimeUtc) }}</span>
+    </div>
+    <div class="event-card__meta">
+      <span class="price">${{ event.ticketPrice | number:'1.2-2' }}</span>
+      <span class="capacity">
+        <span class="occ-bar">
+          <span class="occ-fill" [style.width.%]="occupancyPercent(event)"></span>
+        </span>
+        {{ event.availableTickets }} / {{ event.maxCapacity }} disponibles
+      </span>
+    </div>
+    <div class="event-card__actions">
+      <a [routerLink]="['/events', event.id]" class="btn btn--secondary btn--sm">Ver detalle</a>
+      <a *ngIf="event.status === 'Activo'" [routerLink]="['/events', event.id, 'reserve']" class="btn btn--primary btn--sm">Reservar</a>
+      <a [routerLink]="['/events', event.id, 'report']" class="btn btn--secondary btn--sm">📊 Reporte</a>
+    </div>
+  </div>
+</div>

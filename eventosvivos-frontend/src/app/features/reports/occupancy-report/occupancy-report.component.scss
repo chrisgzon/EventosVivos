@@ -1,0 +1,53 @@
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  text-align: center; padding: 24px 16px;
+  &__label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  &__value { font-size: 2rem; font-weight: 800; color: #fff; line-height: 1; }
+  &__sub   { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+  &--sold    .kpi-card__value { color: var(--success); }
+  &--revenue .kpi-card__value { color: var(--primary); }
+}
+
+.gauge-card {
+  h3 { font-size: 1rem; margin-bottom: 20px; color: var(--text-muted); }
+}
+
+.gauge-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+
+.gauge-svg { width: 240px; }
+
+.gauge-value {
+  font-size: 2.5rem; font-weight: 800; line-height: 1;
+}
+
+.breakdown {
+  margin-top: 24px;
+  &__bar-wrap { }
+  &__bar {
+    display: flex; height: 14px; border-radius: 7px; overflow: hidden;
+    background: rgba(255,255,255,0.05);
+  }
+  &__fill {
+    height: 100%; transition: width 0.6s ease;
+    &--sold      { background: var(--primary); }
+    &--available { background: rgba(255,255,255,0.12); }
+  }
+  &__legend {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;
+  }
+}
+
+.legend-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  &--sold      { background: var(--primary); }
+  &--available { background: rgba(255,255,255,0.2); }
+}

@@ -1,0 +1,101 @@
+<div *ngIf="loading" class="spinner-wrap"><div class="spinner"></div></div>
+
+<div *ngIf="error && !loading" class="alert alert--error">
+  <strong>Error al cargar reporte</strong>{{ error }}
+</div>
+
+<ng-container *ngIf="report && !loading">
+  <div class="page-header">
+    <h1>📊 Reporte de Ocupación</h1>
+    <div style="display:flex;gap:10px">
+      <a [routerLink]="['/events', eventId]" class="btn btn--secondary">← Detalle</a>
+      <button class="btn btn--secondary" (click)="load()">🔄 Actualizar</button>
+    </div>
+  </div>
+
+  <div class="report-title card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Evento</div>
+        <h2 style="font-size:1.4rem;color:#fff">{{ report.eventTitle }}</h2>
+      </div>
+      <span class="badge" [style.background]="statusColor + '22'" [style.color]="statusColor">
+        {{ report.status }}
+      </span>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="card kpi-card">
+      <div class="kpi-card__label">Capacidad Total</div>
+      <div class="kpi-card__value">{{ report.maxCapacity }}</div>
+      <div class="kpi-card__sub">entradas totales</div>
+    </div>
+    <div class="card kpi-card kpi-card--sold">
+      <div class="kpi-card__label">Entradas Vendidas</div>
+      <div class="kpi-card__value">{{ report.confirmedTickets }}</div>
+      <div class="kpi-card__sub">confirmadas</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-card__label">Disponibles</div>
+      <div class="kpi-card__value">{{ report.availableTickets }}</div>
+      <div class="kpi-card__sub">restantes</div>
+    </div>
+    <div class="card kpi-card kpi-card--revenue">
+      <div class="kpi-card__label">Ingresos Totales</div>
+      <div class="kpi-card__value">${{ report.totalRevenue | number:'1.2-2' }}</div>
+      <div class="kpi-card__sub">USD confirmados</div>
+    </div>
+  </div>
+
+  <!-- Occupancy gauge + bar -->
+  <div class="card gauge-card">
+    <h3>Porcentaje de Ocupación</h3>
+
+    <!-- SVG Gauge -->
+    <div class="gauge-wrap">
+      <svg viewBox="0 0 200 110" class="gauge-svg">
+        <!-- Background arc -->
+        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="18" stroke-linecap="round"/>
+        <!-- Foreground arc (animate via stroke-dasharray trick on a half-circle) -->
+        <path d="M 20 100 A 80 80 0 0 1 180 100"
+              fill="none"
+              [attr.stroke]="gaugeColor"
+              stroke-width="18"
+              stroke-linecap="round"
+              [attr.stroke-dasharray]="(report.occupancyPercentage / 100 * 251.2) + ' 251.2'"
+              stroke-dashoffset="0"/>
+        <!-- Needle -->
+        <line
+          x1="100" y1="100"
+          [attr.x2]="100 + 65 * Math.cos((Math.PI - gaugeAngle * Math.PI / 180))"
+          [attr.y2]="100 - 65 * Math.sin((Math.PI - gaugeAngle * Math.PI / 180))"
+          stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="5" fill="white"/>
+        <!-- Labels -->
+        <text x="18"  y="115" fill="var(--text-muted)" font-size="11" text-anchor="middle">0%</text>
+        <text x="100" y="22"  fill="var(--text-muted)" font-size="11" text-anchor="middle">50%</text>
+        <text x="182" y="115" fill="var(--text-muted)" font-size="11" text-anchor="middle">100%</text>
+      </svg>
+      <div class="gauge-value" [style.color]="gaugeColor">{{ report.occupancyPercentage | number:'1.1-1' }}%</div>
+    </div>
+
+    <!-- Bar breakdown -->
+    <div class="breakdown">
+      <div class="breakdown__bar-wrap">
+        <div class="breakdown__bar">
+          <div class="breakdown__fill breakdown__fill--sold"
+               [style.width.%]="report.confirmedTickets / report.maxCapacity * 100"></div>
+          <div class="breakdown__fill breakdown__fill--available"
+               [style.width.%]="report.availableTickets / report.maxCapacity * 100"></div>
+        </div>
+      </div>
+      <div class="breakdown__legend">
+        <span class="legend-dot legend-dot--sold"></span> Vendidas ({{ report.confirmedTickets }})
+        &nbsp;&nbsp;
+        <span class="legend-dot legend-dot--available"></span> Disponibles ({{ report.availableTickets }})
+      </div>
+    </div>
+  </div>
+</ng-container>

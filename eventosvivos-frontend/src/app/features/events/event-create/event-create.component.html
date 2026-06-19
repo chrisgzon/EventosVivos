@@ -1,0 +1,107 @@
+<div class="page-header">
+  <h1>✨ Crear Evento</h1>
+  <a routerLink="/events" class="btn btn--secondary">← Volver</a>
+</div>
+
+<div class="card form-card">
+  <div *ngIf="error" class="alert alert--error" style="margin-bottom:20px">
+    <strong>Error al crear evento</strong>{{ error }}
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <!-- Title + Type -->
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Título *</label>
+        <input type="text" formControlName="title" placeholder="Mínimo 5 caracteres" />
+        <span class="error-msg" *ngIf="f['title'].invalid && f['title'].touched">
+          Requerido, entre 5 y 100 caracteres.
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Tipo de Evento *</label>
+        <select formControlName="type">
+          <option value="">Seleccione...</option>
+          <option *ngFor="let t of eventTypes" [value]="t.value">{{ t.label }}</option>
+        </select>
+        <span class="error-msg" *ngIf="f['type'].invalid && f['type'].touched">Requerido.</span>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group" style="margin-top:16px">
+      <label>Descripción *</label>
+      <textarea formControlName="description" placeholder="Mínimo 10 caracteres, máximo 500"></textarea>
+      <div style="display:flex;justify-content:space-between">
+        <span class="error-msg" *ngIf="f['description'].invalid && f['description'].touched">
+          Requerido, entre 10 y 500 caracteres.
+        </span>
+        <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto">
+          {{ f['description'].value?.length ?? 0 }}/500
+        </span>
+      </div>
+    </div>
+
+    <!-- Venue + Capacity -->
+    <div class="form-grid" style="margin-top:16px">
+      <div class="form-group">
+        <label>Venue *</label>
+        <select formControlName="venueId">
+          <option value="">Seleccione venue...</option>
+          <option *ngFor="let v of venues" [value]="v.id">
+            {{ v.name }} ({{ v.city }}, cap. {{ v.capacity }})
+          </option>
+        </select>
+        <span class="error-msg" *ngIf="f['venueId'].invalid && f['venueId'].touched">Requerido.</span>
+      </div>
+      <div class="form-group">
+        <label>Capacidad Máxima *</label>
+        <input type="number" formControlName="maxCapacity" min="1" placeholder="Ej: 150" />
+        <span class="error-msg" *ngIf="f['maxCapacity'].invalid && f['maxCapacity'].touched">
+          Debe ser un entero positivo, ≤ capacidad del venue.
+        </span>
+      </div>
+    </div>
+
+    <!-- Start + End datetime -->
+    <div class="form-grid" style="margin-top:16px">
+      <div class="form-group">
+        <label>Fecha y Hora Inicio *</label>
+        <input type="datetime-local" formControlName="startDateTimeUtc" />
+        <span class="error-msg" *ngIf="f['startDateTimeUtc'].invalid && f['startDateTimeUtc'].touched">Requerido.</span>
+      </div>
+      <div class="form-group">
+        <label>Fecha y Hora Fin *</label>
+        <input type="datetime-local" formControlName="endDateTimeUtc" />
+        <span class="error-msg" *ngIf="f['endDateTimeUtc'].invalid && f['endDateTimeUtc'].touched">Requerido.</span>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="form-group" style="margin-top:16px;max-width:260px">
+      <label>Precio de Entrada (USD) *</label>
+      <input type="number" formControlName="ticketPrice" min="0.01" step="0.01" placeholder="Ej: 50.00" />
+      <span class="error-msg" *ngIf="f['ticketPrice'].invalid && f['ticketPrice'].touched">
+        Debe ser mayor a 0.
+      </span>
+    </div>
+
+    <!-- Business rules hint -->
+    <div class="rules-hint">
+      <strong>📋 Reglas a tener en cuenta:</strong>
+      <ul>
+        <li>La capacidad no puede exceder la del venue seleccionado.</li>
+        <li>La fecha de inicio debe ser futura.</li>
+        <li>Eventos en fin de semana no pueden iniciar después de las 22:00 (hora Colombia).</li>
+        <li>No puede haber dos eventos activos en el mismo venue con horarios superpuestos.</li>
+      </ul>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn--secondary" routerLink="/events">Cancelar</button>
+      <button type="submit" class="btn btn--primary" [disabled]="submitting">
+        {{ submitting ? 'Creando...' : '✓ Crear Evento' }}
+      </button>
+    </div>
+  </form>
+</div>

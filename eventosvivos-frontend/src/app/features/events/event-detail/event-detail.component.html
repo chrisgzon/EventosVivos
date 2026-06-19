@@ -1,0 +1,121 @@
+<div *ngIf="loading" class="spinner-wrap"><div class="spinner"></div></div>
+
+<div *ngIf="error && !loading" class="alert alert--error">
+  <strong>Error</strong>{{ error }}
+</div>
+
+<ng-container *ngIf="event && !loading">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <span [class]="badgeClass(event.type)">{{ event.type }}</span>
+        <span [class]="badgeClass(event.status)">{{ event.status }}</span>
+      </div>
+      <h1>{{ event.title }}</h1>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a routerLink="/events" class="btn btn--secondary">← Volver</a>
+      <a *ngIf="event.status === 'Activo'" [routerLink]="['/events', event.id, 'reserve']" class="btn btn--primary">🎟 Reservar</a>
+      <a [routerLink]="['/events', event.id, 'report']" class="btn btn--secondary">📊 Reporte</a>
+    </div>
+  </div>
+
+  <!-- Info cards row -->
+  <div class="info-row">
+    <div class="card info-card">
+      <div class="info-card__label">Venue</div>
+      <div class="info-card__value">{{ event.venue.name }}</div>
+      <div class="info-card__sub">{{ event.venue.city }} · Cap. {{ event.venue.capacity }}</div>
+    </div>
+    <div class="card info-card">
+      <div class="info-card__label">Inicio</div>
+      <div class="info-card__value">{{ formatDate(event.startDateTimeUtc) }}</div>
+    </div>
+    <div class="card info-card">
+      <div class="info-card__label">Fin</div>
+      <div class="info-card__value">{{ formatDate(event.endDateTimeUtc) }}</div>
+    </div>
+    <div class="card info-card">
+      <div class="info-card__label">Precio</div>
+      <div class="info-card__value price">${{ event.ticketPrice | number:'1.2-2' }}</div>
+    </div>
+    <div class="card info-card">
+      <div class="info-card__label">Disponibles</div>
+      <div class="info-card__value">{{ event.availableTickets }} / {{ event.maxCapacity }}</div>
+      <div class="occ-bar" style="margin-top:8px">
+        <div class="occ-fill" [style.width.%]="occupancyPercent()"></div>
+      </div>
+      <div class="info-card__sub">{{ occupancyPercent() }}% ocupado</div>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="card" style="margin-bottom:24px">
+    <p class="desc-text">{{ event.description }}</p>
+  </div>
+
+  <!-- Reservations admin panel -->
+  <div class="card">
+    <h2 style="margin-bottom:16px;font-size:1.1rem">🗂 Reservas ({{ reservations.length }})</h2>
+
+    <div *ngIf="actionSuccess" class="alert alert--success" style="margin-bottom:14px">{{ actionSuccess }}</div>
+    <div *ngIf="actionError"   class="alert alert--error"   style="margin-bottom:14px"><strong>Error</strong>{{ actionError }}</div>
+
+    <div *ngIf="reservations.length === 0" class="empty-state" style="padding:30px 0">
+      <div class="empty-icon">🎟</div>
+      <p>Aún no hay reservas para este evento.</p>
+    </div>
+
+    <div *ngIf="reservations.length > 0" class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Comprador</th>
+            <th>Email</th>
+            <th>Entradas</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Código</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of reservations" [class.row--lost]="r.isLostOnCancellation">
+            <td><strong>{{ r.buyerName }}</strong></td>
+            <td style="color:var(--text-muted)">{{ r.buyerEmail }}</td>
+            <td>{{ r.quantity }}</td>
+            <td>${{ r.totalAmount | number:'1.2-2' }}</td>
+            <td>
+              <span [class]="badgeClass(r.status)">{{ r.status }}</span>
+              <span *ngIf="r.isLostOnCancellation" class="badge badge--cancelado" style="margin-left:4px">Perdida</span>
+            </td>
+            <td>
+              <code *ngIf="r.reservationCode">{{ r.reservationCode }}</code>
+              <span *ngIf="!r.reservationCode" style="color:var(--text-muted)">—</span>
+            </td>
+            <td>
+              <div style="display:flex;gap:6px">
+                <button
+                  *ngIf="r.status === 'PendientePago'"
+                  class="btn btn--success btn--sm"
+                  (click)="confirmPayment(r)"
+                  [disabled]="processingId === r.id">
+                  {{ processingId === r.id ? '...' : '✓ Confirmar' }}
+                </button>
+                <button
+                  *ngIf="r.status !== 'Cancelada'"
+                  class="btn btn--danger btn--sm"
+                  (click)="cancelReservation(r)"
+                  [disabled]="processingId === r.id">
+                  {{ processingId === r.id ? '...' : '✕ Cancelar' }}
+                </button>
+                <span *ngIf="r.status === 'Cancelada'" style="color:var(--text-muted);font-size:0.8rem">—</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>

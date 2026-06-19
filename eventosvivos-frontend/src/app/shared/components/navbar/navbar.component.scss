@@ -1,0 +1,48 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 64px;
+  background: #1a1a2e;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__logo { font-size: 1.6rem; }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #e94560;
+    letter-spacing: 0.5px;
+  }
+
+  &__links {
+    display: flex;
+    list-style: none;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+
+    a {
+      display: block;
+      padding: 8px 16px;
+      border-radius: 6px;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+
+      &:hover { background: rgba(255,255,255,0.08); color: #fff; }
+      &.active { background: #e94560; color: #fff; font-weight: 600; }
+    }
+  }
+}
