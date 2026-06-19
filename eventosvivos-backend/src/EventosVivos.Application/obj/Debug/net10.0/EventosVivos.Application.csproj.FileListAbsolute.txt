@@ -1,0 +1,16 @@
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\bin\Debug\net10.0\EventosVivos.Application.deps.json
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\bin\Debug\net10.0\EventosVivos.Application.dll
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\bin\Debug\net10.0\EventosVivos.Application.pdb
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\bin\Debug\net10.0\EventosVivos.Domain.dll
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\bin\Debug\net10.0\EventosVivos.Domain.pdb
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.csproj.AssemblyReference.cache
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.AssemblyInfoInputs.cache
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.AssemblyInfo.cs
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.csproj.CoreCompileInputs.cache
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.sourcelink.json
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosV.A48560CB.Up2Date
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.dll
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\refint\EventosVivos.Application.dll
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\EventosVivos.Application.pdb
+C:\Users\USUARIO\Documents\Ceiba\EventosVivos\eventosvivos-backend\src\EventosVivos.Application\obj\Debug\net10.0\ref\EventosVivos.Application.dll
